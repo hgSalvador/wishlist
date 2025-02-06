@@ -1,7 +1,9 @@
 import { UniqueEntityID } from "../entities/unique.entity-id";
 import { Movie } from "../entities/movie";
-import { MoviesRepository } from "../repositories/in-memory/in-memory-movies-repository";
-import { ItmdbMoviesServices } from "../services/tmdb-services";
+import { MoviesRepository } from "../repositories/movies-repository";
+import { TmdbMoviesServices } from "../services/tmdb-services";
+import { MovieNotFoundError } from "./errors/movie-not-found";
+import { ResourceNotFoundError } from "./errors/resource-not-found";
 
 
 interface CreateMovieUseCaseRequest {
@@ -13,21 +15,26 @@ interface CreateMovietUseCaseResponse {
     movie: Movie
 }
 
-
 export class CreateMovieUseCase {
     constructor(
         private moviesRepository: MoviesRepository,
-        private itmdbServices: ItmdbMoviesServices
+        private tmdbServices: TmdbMoviesServices
     ) {}
 
     async execute({
         userId,
         movieName
     }: CreateMovieUseCaseRequest): Promise<CreateMovietUseCaseResponse> {
-        const isValidMovie = await this.itmdbServices.getMovieByName(movieName)
+        const isValidMovie = await this.tmdbServices.findMovieByName(movieName)
 
         if (!isValidMovie) {
-            throw new Error('Movie not found, please try again')
+            throw new MovieNotFoundError()
+        }
+
+        const isValidMovieOnBase = await this.moviesRepository.findMovieByTmdbId(isValidMovie.tmdbId)
+
+        if (!isValidMovieOnBase) {
+            throw new ResourceNotFoundError()
         }
 
         const movie = Movie.create({
@@ -48,5 +55,4 @@ export class CreateMovieUseCase {
             movie
         }
     }
-    
 }

@@ -1,7 +1,16 @@
-import { Movie } from "../../entities/movie"
+import { MoviesRepository } from "../movies-repository";
+import { Movie } from "../../entities/movie";
 
+export class InMemoryMoviesRepository implements MoviesRepository {
+    public items: Movie[] = []
 
-export interface MoviesRepository {
-    save(movie: Movie): Promise<void>
-    create(movie: Movie): Promise<void>
+    async create(movie: Movie) {
+        this.items.push(movie)
+    }
+
+    async save(movie: Movie) {
+        const itemIndex = this.items.findIndex((item) => item.id === movie.id)
+
+        this.items[itemIndex] = movie
+    }    
 }

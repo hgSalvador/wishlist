@@ -16,7 +16,7 @@ const genericMovie = Movie.create({
 })
 
 
-export class InMemoryItmdMoviesServices implements TmdbMoviesServices {
+export class InMemoryTmdbMoviesServices implements TmdbMoviesServices {
     public items: Movie[] = [genericMovie]
 
     async findMovieByName(name: string) {

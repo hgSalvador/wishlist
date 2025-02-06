@@ -1,4 +1,4 @@
-interface ItmdMoviesServicesResponse {
+interface TmdbMoviesServicesResponse {
     tmdbId: string
     title: string
     synopsis: string
@@ -10,6 +10,6 @@ interface ItmdMoviesServicesResponse {
 }
 
 
-export interface ItmdbMoviesServices {
-    getMovieByName(name: string): Promise<ItmdMoviesServicesResponse>
+export interface TmdbMoviesServices {
+    getMovieByName(name: string): Promise<TmdbMoviesServicesResponse>
 }

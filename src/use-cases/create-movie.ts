@@ -1,7 +1,7 @@
 import { UniqueEntityID } from "../entities/unique.entity-id";
 import { Movie } from "../entities/movie";
 import { MoviesRepository } from "../repositories/in-memory/in-memory-movies-repository";
-import { ItmdbMoviesServices } from "../services/itmdb-services";
+import { ItmdbMoviesServices } from "../services/tmdb-services";
 
 
 interface CreateMovieUseCaseRequest {

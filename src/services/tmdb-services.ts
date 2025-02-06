@@ -11,5 +11,5 @@ interface TmdbMoviesServicesResponse {
 
 
 export interface TmdbMoviesServices {
-    getMovieByName(name: string): Promise<TmdbMoviesServicesResponse>
+    findMovieByName(name: string): Promise<TmdbMoviesServicesResponse | null>
 }

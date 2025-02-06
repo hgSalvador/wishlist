@@ -23,43 +23,43 @@ export class Movie extends Entity<MovieProps> {
     }
 
     get tmdbId() {
-        return this.tmdbId
+        return this.props.tmdbId
     }
 
     get title() {
-        return this.title
+        return this.props.title
     }
 
     get synopsis() {
-        return this.synopsis
+        return this.props.synopsis
     }
 
     get releaseDate() {
-        return this.releaseDate
+        return this.props.releaseDate
     }
 
     get genre() {
-        return this.genre
+        return this.props.genre
     }
 
     get state() {
-        return this.state
+        return this.props.state
     }
 
     get rating() {
-        return this.rating
+        return this.props.rating
     }
 
     get recommended() {
-        return this.recommended
+        return this.props.recommended
     }
 
     get createdAt() {
-        return this.createdAt
+        return this.props.createdAt
     }
 
     get updatedAt() {
-        return this.updatedAt
+        return this.props.updatedAt
     }
 
     private touch() {

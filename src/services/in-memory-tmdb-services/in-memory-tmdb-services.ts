@@ -1,6 +1,5 @@
 import { TmdbMoviesServices } from "../tmdb-services";
 import { Movie } from "../../entities/movie";
-import { randomUUID } from "crypto";
 import { UniqueEntityID } from "../../entities/unique.entity-id";
 
 const genericMovie = Movie.create({
@@ -10,7 +9,7 @@ const genericMovie = Movie.create({
     synopsis: "A group of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
     releaseDate: "2014-11-07",
     genre: "Sci-Fi",
-    state: "Available",
+    state: "To watch",
     rating: 8,
     recommended: true,
 })

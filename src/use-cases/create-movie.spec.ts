@@ -1,18 +1,29 @@
 import { UniqueEntityID } from "../entities/unique.entity-id";
 import { CreateMovieUseCase } from "./create-movie";
-import { InMemoryMoviesRepository } from "../test/repositories/in-memory-movies-repository";
+import { InMemoryTmdbMoviesServices } from "../services/in-memory-tmdb-services/in-memory-tmdb-services";
+import { InMemoryMoviesRepository } from "../repositories/in-memory/in-memory-movies-repository";
 import { describe, expect, it, beforeEach } from "vitest";
-import { ItmdbMoviesServices } from "../services/tmdb-services";
 
 
 let inMemoryMoviesRepository: InMemoryMoviesRepository
-let itmdbServices: ItmdbMoviesServices
+let itmdbServices: InMemoryTmdbMoviesServices
 let sut: CreateMovieUseCase
 
 describe('Create movie', () => {
     beforeEach(() => {
         inMemoryMoviesRepository = new InMemoryMoviesRepository(),
-
-        sut = new CreateMovieUseCase(inMemoryMoviesRepository)
+        itmdbServices = new InMemoryTmdbMoviesServices()
+        sut = new CreateMovieUseCase(inMemoryMoviesRepository, itmdbServices)
     })
+
+    it('should be able to register', async () => {
+        const { movie } = await sut.execute({
+            userId: 'user-01',
+            movieName: 'Interstellar'
+        })
+
+        console.log(movie)
+    
+        expect(movie.id).toEqual(expect.any(String))
+      })
 })

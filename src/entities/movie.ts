@@ -19,7 +19,7 @@ export interface MovieProps {
 
 export class Movie extends Entity<MovieProps> {
     get userId() {
-        return this.userId
+        return this.props.userId
     }
 
     get tmdbId() {

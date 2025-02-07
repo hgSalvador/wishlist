@@ -4,7 +4,6 @@ import { InMemoryTmdbMoviesServices } from "../services/in-memory-tmdb-services/
 import { InMemoryMoviesRepository } from "../repositories/in-memory/in-memory-movies-repository";
 import { describe, expect, it, beforeEach } from "vitest";
 
-
 let inMemoryMoviesRepository: InMemoryMoviesRepository
 let itmdbServices: InMemoryTmdbMoviesServices
 let sut: CreateMovieUseCase
@@ -24,6 +23,6 @@ describe('Create movie', () => {
 
         console.log(movie)
     
-        expect(movie.id).toEqual(expect.any(String))
+        expect(inMemoryMoviesRepository.items[0].title).toBe('Interstellar')
       })
 })

@@ -1,4 +1,6 @@
-interface TmdbMoviesServicesResponse {
+import { Movie } from "../entities/movie"
+
+export interface TmdbMoviesServicesResponse {
     tmdbId: string
     title: string
     synopsis: string

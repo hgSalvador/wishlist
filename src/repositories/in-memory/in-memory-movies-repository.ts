@@ -5,13 +5,7 @@ export class InMemoryMoviesRepository implements MoviesRepository {
     public items: Movie[] = []
 
     async findMovieByTmdbId(tmdbId: string) {
-        const movie = this.items.find((item) => item.tmdbId === tmdbId)
-
-        if (!movie) {
-            return null
-        }
-
-        return movie
+        return this.items.some((item) => item.tmdbId.toString() === tmdbId)
     }
     
     async create(movie: Movie) {

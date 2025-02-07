@@ -32,8 +32,9 @@ export class CreateMovieUseCase {
         }
 
         const isValidMovieOnBase = await this.moviesRepository.findMovieByTmdbId(isValidMovie.tmdbId)
+        console.log(isValidMovieOnBase)
 
-        if (!isValidMovieOnBase) {
+        if (isValidMovieOnBase) {
             throw new ResourceNotFoundError()
         }
 

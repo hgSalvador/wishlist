@@ -112,7 +112,6 @@ export class Movie extends Entity<MovieProps> {
             },
             id,
         )
-
         return movie
     }
 

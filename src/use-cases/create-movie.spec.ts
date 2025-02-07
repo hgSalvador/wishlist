@@ -1,8 +1,10 @@
-import { UniqueEntityID } from "../entities/unique.entity-id";
-import { CreateMovieUseCase } from "./create-movie";
+import { describe, expect, it, beforeEach } from "vitest";
 import { InMemoryTmdbMoviesServices } from "../services/in-memory-tmdb-services/in-memory-tmdb-services";
 import { InMemoryMoviesRepository } from "../repositories/in-memory/in-memory-movies-repository";
-import { describe, expect, it, beforeEach } from "vitest";
+import { CreateMovieUseCase } from "./create-movie";
+
+
+
 
 let inMemoryMoviesRepository: InMemoryMoviesRepository
 let itmdbServices: InMemoryTmdbMoviesServices
@@ -20,9 +22,8 @@ describe('Create movie', () => {
             userId: 'user-01',
             movieName: 'Interstellar'
         })
-
-        console.log(movie)
     
         expect(inMemoryMoviesRepository.items[0].title).toBe('Interstellar')
+        expect(inMemoryMoviesRepository.items[0].state).toBe('To watch')
       })
 })

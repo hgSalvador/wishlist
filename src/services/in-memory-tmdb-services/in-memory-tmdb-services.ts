@@ -1,6 +1,4 @@
 import { TmdbMoviesServices, TmdbMoviesServicesResponse } from "../tmdb-services";
-import { Movie } from "../../entities/movie";
-import { UniqueEntityID } from "../../entities/unique.entity-id";
 
 export class InMemoryTmdbMoviesServices implements TmdbMoviesServices {
     public items: TmdbMoviesServicesResponse[] = [{
@@ -16,8 +14,6 @@ export class InMemoryTmdbMoviesServices implements TmdbMoviesServices {
 
     async findMovieByName(name: string) {
         const movie = this.items.find((item) => item.title === name)
-
-        console.log(movie)
 
         if (!movie) {
             return null

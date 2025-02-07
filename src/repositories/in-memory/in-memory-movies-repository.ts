@@ -1,8 +1,18 @@
 import { MoviesRepository } from "../movies-repository";
 import { Movie } from "../../entities/movie";
+import { PaginationParams } from "../pagination-params";
 
 export class InMemoryMoviesRepository implements MoviesRepository {
     public items: Movie[] = []
+
+    async getAllMovies(userId, { page }: PaginationParams) {
+        const movies = this.items
+        .filter((item) => item.userId === userId)
+        .sort((a, b) => a.title.localeCompare(b.title))
+        .slice((page -1) * 20, page * 20)
+
+        return movies
+    }
 
     async findMovieByTmdbId(tmdbId: string) {
         return this.items.some((item) => item.tmdbId.toString() === tmdbId)

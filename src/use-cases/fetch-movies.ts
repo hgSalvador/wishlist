@@ -18,7 +18,7 @@ export class FetchMoviesUseCase {
         page,
     }: FetchMoviesUseCaseRequest): Promise<FetchQuestionUseCaseResponse> {
         const movies = await this.moviesRepository.getAllMovies(userId, { page })
-
+        
         return {
             movies
         }

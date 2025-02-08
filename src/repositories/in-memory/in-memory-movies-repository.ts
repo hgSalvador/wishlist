@@ -7,7 +7,7 @@ export class InMemoryMoviesRepository implements MoviesRepository {
 
     async getAllMovies(userId, { page }: PaginationParams) {
         const movies = this.items
-        .filter((item) => item.userId === userId)
+        .filter((item) => item.userId.toString() === userId)
         .sort((a, b) => a.title.localeCompare(b.title))
         .slice((page -1) * 20, page * 20)
 

@@ -8,6 +8,7 @@ import { UniqueEntityID } from "../entities/unique.entity-id";
 
 
 let validMovieTmdb: TmdbMoviesServicesResponse[] = []
+let movies: Movie[]
 let inMemoryMoviesRepository: InMemoryMoviesRepository
 let sut: FetchMoviesUseCase
 
@@ -27,7 +28,7 @@ describe('List movies', () => {
             recommended: index % 2 === 0, 
         }));
 
-        const movies = validMovieTmdb.map((movie) => {
+        movies = validMovieTmdb.map((movie) => {
             return Movie.create({
                 userId: new UniqueEntityID('user-01'),
                 tmdbId: new UniqueEntityID(movie.tmdbId.toString()),

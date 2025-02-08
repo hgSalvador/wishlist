@@ -5,6 +5,16 @@ import { PaginationParams } from "../pagination-params";
 export class InMemoryMoviesRepository implements MoviesRepository {
     public items: Movie[] = []
 
+    async findMovieById(id: string) {
+        const movie = this.items.find((item) => item.id.toString() === id)
+
+        if (!movie) {
+            return null
+        }
+
+        return movie
+    }
+
     async getAllMovies(userId, { page }: PaginationParams) {
         const movies = this.items
         .filter((item) => item.userId.toString() === userId)

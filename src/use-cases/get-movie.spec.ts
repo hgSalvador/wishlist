@@ -2,19 +2,19 @@ import { expect, beforeEach, describe, it } from 'vitest';
 import { Movie } from '../entities/movie';
 import { TmdbMoviesServicesResponse } from '../services/tmdb-services';
 import { InMemoryMoviesRepository } from '../repositories/in-memory/in-memory-movies-repository';
-import { GetMovieByIdUseCase } from './get-movie';
+import { GetMovieUseCase } from './get-movie';
 import { UniqueEntityID } from '../entities/unique.entity-id';
 import { ResourceNotFoundError } from './errors/resource-not-found';
 
 let validMovieTmdb: TmdbMoviesServicesResponse[] = []
 let movie: Movie
 let inMemoryMoviesRepository: InMemoryMoviesRepository
-let sut: GetMovieByIdUseCase
+let sut: GetMovieUseCase
 
 describe('Get a movie By Id', () => {
     beforeEach(async () => {
         inMemoryMoviesRepository = new InMemoryMoviesRepository()
-        sut = new GetMovieByIdUseCase(inMemoryMoviesRepository)
+        sut = new GetMovieUseCase(inMemoryMoviesRepository)
 
         validMovieTmdb = [
             {

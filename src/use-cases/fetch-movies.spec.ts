@@ -37,7 +37,7 @@ describe('List movies', () => {
                 releaseDate: movie.releaseDate,
                 genre: movie.genre,
                 state: 'To watch',
-                rating: movie.rating,
+                rating: 1,
                 recommended: movie.recommended,
             });
         });

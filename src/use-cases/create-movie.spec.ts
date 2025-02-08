@@ -3,22 +3,19 @@ import { InMemoryTmdbMoviesServices } from "../services/in-memory-tmdb-services/
 import { InMemoryMoviesRepository } from "../repositories/in-memory/in-memory-movies-repository";
 import { CreateMovieUseCase } from "./create-movie";
 
-
-
-
 let inMemoryMoviesRepository: InMemoryMoviesRepository
-let itmdbServices: InMemoryTmdbMoviesServices
+let tmdbServices: InMemoryTmdbMoviesServices
 let sut: CreateMovieUseCase
 
-describe('Create movie', () => {
+describe('Create a movie', () => {
     beforeEach(() => {
         inMemoryMoviesRepository = new InMemoryMoviesRepository(),
-        itmdbServices = new InMemoryTmdbMoviesServices()
-        sut = new CreateMovieUseCase(inMemoryMoviesRepository, itmdbServices)
+        tmdbServices = new InMemoryTmdbMoviesServices()
+        sut = new CreateMovieUseCase(inMemoryMoviesRepository, tmdbServices)
     })
 
     it('should be able to register', async () => {
-        const { movie } = await sut.execute({
+        await sut.execute({
             userId: 'user-01',
             movieName: 'Interstellar'
         })

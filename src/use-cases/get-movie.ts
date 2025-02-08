@@ -10,7 +10,7 @@ interface GetMovieUseCaseResponse {
     movie: Movie
 }
 
-export class GetMovieByIdUseCase {
+export class GetMovieUseCase {
     constructor(private moviesRepository: MoviesRepository) {}
 
     async execute({

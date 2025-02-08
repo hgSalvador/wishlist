@@ -40,13 +40,6 @@ describe('Rate the movie', () => {
     })
 
     it('should not to be able to give a rating more than five', async ()=> {
-        const result = await sut.execute({
-            userId: 'user-01',
-            movieId: movie.id.toString(),
-            rating: 5
-        })
-
-
         await expect(sut.execute({             
             userId: 'user-01',
             movieId: movie.id.toString(),

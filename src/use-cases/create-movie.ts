@@ -45,8 +45,8 @@ export class CreateMovieUseCase {
             synopsis: isValidMovie.synopsis,
             releaseDate: isValidMovie.releaseDate,
             genre: isValidMovie.genre,
-            state: isValidMovie.state,
-            rating: isValidMovie.rating,
+            state: 'To watch',
+            rating: 1,
             recommended: isValidMovie.recommended,     
         })
 

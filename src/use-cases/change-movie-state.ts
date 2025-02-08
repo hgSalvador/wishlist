@@ -3,27 +3,32 @@ import { MoviesRepository } from "../repositories/movies-repository";
 import { ResourceNotFoundError } from "./errors/resource-not-found";
 
 interface ChangeMovieStateUseCaseRequest {
+    userId: string
     movieId: string
     state: string
 }
 
 interface ChangeMovieStateUseCaseResponse {
     movieId: string
-    stateChanged: string
+    previousState: string
+    currentState: string
 }
 
 export class ChangeMovieStateUseCase {
     constructor(private moviesRepository: MoviesRepository) {}
 
     async execute({
+        userId,
         movieId, 
         state
     }: ChangeMovieStateUseCaseRequest): Promise<ChangeMovieStateUseCaseResponse> {
-        const movie = await this.moviesRepository.findMovieById(movieId)
+        const movie = await this.moviesRepository.findMovieByMovieIdAndUserId(userId, movieId)
 
         if (!movie) {
             throw new ResourceNotFoundError()
         }
+
+        const oldState = movie.state
 
         movie.state = state
 
@@ -31,7 +36,8 @@ export class ChangeMovieStateUseCase {
 
         return {
             movieId: movie.id.toString(),
-            stateChanged: movie.state
+            previousState: oldState,
+            currentState: movie.state
         }
     }
 }

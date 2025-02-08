@@ -11,7 +11,7 @@ export interface MovieProps {
     releaseDate: string
     genre: string
     state: string
-    rating: number
+    rating: number 
     recommended: boolean
     createdAt: Date
     updatedAt?: Date

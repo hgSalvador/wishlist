@@ -4,8 +4,6 @@ export interface TmdbMoviesServicesResponse {
     synopsis: string
     releaseDate: string
     genre: string
-    state: string
-    rating: number
     recommended: boolean
 }
 

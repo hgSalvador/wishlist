@@ -7,7 +7,7 @@ import { UniqueEntityID } from "../entities/unique.entity-id";
 
 
 
-let validMovieTmdb: TmdbMoviesServicesResponse[] = []
+let validMoviesTmdb: TmdbMoviesServicesResponse[] = []
 let movies: Movie[]
 let inMemoryMoviesRepository: InMemoryMoviesRepository
 let sut: FetchMoviesUseCase
@@ -17,7 +17,7 @@ describe('List movies', () => {
         inMemoryMoviesRepository = new InMemoryMoviesRepository();
         sut = new FetchMoviesUseCase(inMemoryMoviesRepository);
 
-        validMovieTmdb = Array.from({ length: 22 }, (_, index) => ({
+        validMoviesTmdb = Array.from({ length: 22 }, (_, index) => ({
             tmdbId: `movie-${index + 1}`,
             title: `Movie ${index + 1}`,
             synopsis: `Synopsis for movie ${index + 1}`,
@@ -28,7 +28,7 @@ describe('List movies', () => {
             recommended: index % 2 === 0, 
         }));
 
-        movies = validMovieTmdb.map((movie) => {
+        movies = validMoviesTmdb.map((movie) => {
             return Movie.create({
                 userId: new UniqueEntityID('user-01'),
                 tmdbId: new UniqueEntityID(movie.tmdbId.toString()),
@@ -36,7 +36,7 @@ describe('List movies', () => {
                 synopsis: movie.synopsis,
                 releaseDate: movie.releaseDate,
                 genre: movie.genre,
-                state: movie.state,
+                state: 'To watch',
                 rating: movie.rating,
                 recommended: movie.recommended,
             });

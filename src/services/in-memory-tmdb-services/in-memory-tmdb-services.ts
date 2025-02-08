@@ -7,8 +7,6 @@ export class InMemoryTmdbMoviesServices implements TmdbMoviesServices {
         synopsis: "A group of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
         releaseDate: "2014-11-07",
         genre: "Sci-Fi",
-        state: "To watch",
-        rating: 8,
         recommended: true,
     }]
 
@@ -19,15 +17,6 @@ export class InMemoryTmdbMoviesServices implements TmdbMoviesServices {
             return null
         }
 
-        return {
-            tmdbId: 'tmdb-01',
-            title: "Interstellar",
-            synopsis: "A group of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
-            releaseDate: "2014-11-07",
-            genre: "Sci-Fi",
-            state: "To watch",
-            rating: 8,
-            recommended: true,
-        }
+        return movie
     }
 }

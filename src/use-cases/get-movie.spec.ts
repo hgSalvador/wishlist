@@ -23,8 +23,6 @@ describe('Get a movie By Id', () => {
                 synopsis: 'Synopsis for movie 01',
                 releaseDate: '2022-01-01',
                 genre: 'Genre-01',
-                state: 'Available',
-                rating: 7,
                 recommended: true
             }
         ]
@@ -36,8 +34,8 @@ describe('Get a movie By Id', () => {
             synopsis: validMovieTmdb[0].synopsis,
             releaseDate: validMovieTmdb[0].releaseDate,
             genre: validMovieTmdb[0].genre,
-            state: validMovieTmdb[0].state,
-            rating: validMovieTmdb[0].rating,
+            state: 'To watch',
+            rating: 1,
             recommended: validMovieTmdb[0].recommended
         })
 

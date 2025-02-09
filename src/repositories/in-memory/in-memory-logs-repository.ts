@@ -5,18 +5,13 @@ import { PaginationParams } from "../pagination-params";
 export class InMemoryLogsRepository implements LogsRepository { 
     public items: Log[] = []
     
-    async findManyLogsByMovieId(logId: string, { page }: PaginationParams) {
-        const logs = this.items.filter((item) => item.id === logId).slice((page -1) * 20, page * 20)
-        
-        if (logs.length === 0) {
-            return null
-        }    
-            return logs
-        }   
+    async findManyLogs({ page }: PaginationParams) {
+        return this.items.slice((page -1) * 20, page * 20)
+    }   
     
     async create(log: Log) {
         this.items.push(log)
-
+        
         return log
     }
     

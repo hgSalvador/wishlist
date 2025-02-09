@@ -1,11 +1,12 @@
 import { describe, expect, it, beforeEach } from "vitest";
 import { InMemoryMoviesRepository } from "../repositories/in-memory/in-memory-movies-repository";
 import { FetchMoviesUseCase } from "./fetch-movies";
-import { TmdbMoviesServicesResponse } from "../services/tmdb-services";
+import { TmdbMoviesServicesSuccesResponse } from "../services/tmdb-services";
 import { Movie } from "../entities/movie";
 import { UniqueEntityID } from "../entities/unique.entity-id";
+import { ResourceNotFoundError } from "./errors/resource-not-found";
 
-let validMoviesTmdb: TmdbMoviesServicesResponse[] = []
+let validMoviesTmdb: TmdbMoviesServicesSuccesResponse[] = []
 let movies: Movie[]
 let inMemoryMoviesRepository: InMemoryMoviesRepository
 let sut: FetchMoviesUseCase
@@ -16,6 +17,13 @@ describe('List movies', () => {
         sut = new FetchMoviesUseCase(inMemoryMoviesRepository);
 
         validMoviesTmdb = Array.from({ length: 22 }, (_, index) => ({
+            metaData: {
+                protocol: 'HTTP',
+                endpoint: 'tmdb.api-example/searchMovie',
+                method: 'GET',
+                statusCode: 200,
+                timeStamp: new Date()
+            },
             tmdbId: `movie-${index + 1}`,
             title: `Movie ${index + 1}`,
             synopsis: `Synopsis for movie ${index + 1}`,
@@ -63,5 +71,12 @@ describe('List movies', () => {
         })
 
         expect(result.movies).toHaveLength(2)
+    })
+
+    it('should be able to not found movies', async ()=> {
+        await expect(sut.execute({             
+            userId: 'user-02',
+            page: 1 
+        })).rejects.toThrowError(ResourceNotFoundError)
     })
 });

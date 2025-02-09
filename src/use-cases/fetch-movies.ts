@@ -1,5 +1,6 @@
 import { Movie } from "../entities/movie";
 import { MoviesRepository } from "../repositories/movies-repository";
+import { ResourceNotFoundError } from "./errors/resource-not-found";
 
 interface FetchMoviesUseCaseRequest {
     userId: string
@@ -18,6 +19,10 @@ export class FetchMoviesUseCase {
         page,
     }: FetchMoviesUseCaseRequest): Promise<FetchQuestionUseCaseResponse> {
         const movies = await this.moviesRepository.getAllMovies(userId, { page })
+
+        if (movies.length === 0) {
+            throw new ResourceNotFoundError()
+        }
         
         return {
             movies

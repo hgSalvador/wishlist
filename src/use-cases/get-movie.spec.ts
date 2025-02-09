@@ -1,12 +1,12 @@
 import { expect, beforeEach, describe, it } from 'vitest';
 import { Movie } from '../entities/movie';
-import { TmdbMoviesServicesResponse } from '../services/tmdb-services';
+import { TmdbMoviesServicesSuccesResponse } from '../services/tmdb-services';
 import { InMemoryMoviesRepository } from '../repositories/in-memory/in-memory-movies-repository';
 import { GetMovieUseCase } from './get-movie';
 import { UniqueEntityID } from '../entities/unique.entity-id';
 import { ResourceNotFoundError } from './errors/resource-not-found';
 
-let validMovieTmdb: TmdbMoviesServicesResponse[] = []
+let validMovieTmdb: TmdbMoviesServicesSuccesResponse[] = []
 let movie: Movie
 let inMemoryMoviesRepository: InMemoryMoviesRepository
 let sut: GetMovieUseCase
@@ -23,7 +23,14 @@ describe('Get a movie By Id', () => {
                 synopsis: 'Synopsis for movie 01',
                 releaseDate: '2022-01-01',
                 genre: 'Genre-01',
-                recommended: true
+                recommended: true,
+                metaData: {
+                    protocol: 'HTTP',
+                    endpoint: 'tmd.api-example/movie',
+                    method: 'GET',
+                    statusCode: 200,
+                    timeStamp: new Date()
+                }
             }
         ]
 

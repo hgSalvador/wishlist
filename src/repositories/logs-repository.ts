@@ -11,7 +11,7 @@ export interface Log {
 }
 
 export interface LogsRepository {
-    findManyLogsByMovieId(movieId: string, { page }: PaginationParams): Promise<Log[] | null>
+    findManyLogs({ page }: PaginationParams): Promise<Log[]>
     create(log: Log): Promise<Log>
     save(log: Log): Promise<void>
 }

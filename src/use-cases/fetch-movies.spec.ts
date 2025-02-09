@@ -5,8 +5,6 @@ import { TmdbMoviesServicesResponse } from "../services/tmdb-services";
 import { Movie } from "../entities/movie";
 import { UniqueEntityID } from "../entities/unique.entity-id";
 
-
-
 let validMoviesTmdb: TmdbMoviesServicesResponse[] = []
 let movies: Movie[]
 let inMemoryMoviesRepository: InMemoryMoviesRepository

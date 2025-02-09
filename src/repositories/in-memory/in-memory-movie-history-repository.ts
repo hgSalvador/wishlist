@@ -2,17 +2,17 @@ import { MovieHistoryRepository } from "../history-movies-repository";
 import { MovieHistory } from "../history-movies-repository";
 import { PaginationParams } from "../pagination-params";
 
-export class InMemoryMovieHistoryRepository implements MovieHistoryRepository{
+export class InMemoryMovieHistoryRepository implements MovieHistoryRepository {
     public items: MovieHistory[] = []
 
-    async findMovieHistoryById(movieHistoryId: string) {
-        const movieHistory = this.items.find((item) => item.id === movieHistoryId)
-
-        if (!movieHistory) {
+    async findManyMovieHistoriesByMovieId(movieHistoryId: string, { page }: PaginationParams) {
+        const movieHistories = this.items.filter((item) => item.movieId.toString() === movieHistoryId).slice((page -1) * 20, page * 20)
+    
+        if (movieHistories.length === 0) {
             return null
         }
-
-        return movieHistory
+    
+        return movieHistories
     }
 
     async create(movieHistory: MovieHistory) {

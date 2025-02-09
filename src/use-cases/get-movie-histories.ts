@@ -2,27 +2,36 @@ import { watch } from "fs";
 import { MovieHistory } from "../repositories/history-movies-repository";
 import { MovieHistoryRepository } from "../repositories/history-movies-repository";
 import { ResourceNotFoundError } from "./errors/resource-not-found";
+import { Resolver } from "dns";
 
 interface GetMovieHistoryUseCaseRequest {
-    movieHistoryId: string
+    movieId: string
+    page: number
 }
 
 interface GetMovieHistoryUseCaseResponse {
-    movieHistory: MovieHistory
+    movieHistories: MovieHistory[]
 }
 
 export class GetMovieHistoryUseCase {
     constructor(private movieHistoryRepository: MovieHistoryRepository) {}
 
     async execute({
-        movieHistoryId
+        movieId,
+        page
     }: GetMovieHistoryUseCaseRequest): Promise<GetMovieHistoryUseCaseResponse> {
-        const movieHistory = await this.movieHistoryRepository.findMovieHistoryById(movieHistoryId)
+        const movieHistories = await this.movieHistoryRepository.findManyMovieHistoriesByMovieId(movieId, { page })
 
-        if (!movieHistory) {
+        if (!movieHistories) {
             throw new ResourceNotFoundError()
         }
 
-        return movieHistory 
+        if (movieHistories?.length === 0) {
+            throw new ResourceNotFoundError()
+        }
+
+        return {
+            movieHistories: movieHistories
+        }
     }
 }

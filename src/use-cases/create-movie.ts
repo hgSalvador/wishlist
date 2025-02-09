@@ -1,5 +1,6 @@
 import { UniqueEntityID } from "../entities/unique.entity-id";
 import { Movie } from "../entities/movie";
+import { CreateLogUseCase } from "./create-log";
 import { MoviesRepository } from "../repositories/movies-repository";
 import { TmdbMoviesServices } from "../services/tmdb-services";
 import { MovieNotFoundError } from "./errors/movie-not-found";
@@ -17,6 +18,7 @@ interface CreateMovietUseCaseResponse {
 
 export class CreateMovieUseCase {
     constructor(
+        private createLog: CreateLogUseCase,
         private moviesRepository: MoviesRepository,
         private tmdbServices: TmdbMoviesServices
     ) {}
@@ -27,9 +29,21 @@ export class CreateMovieUseCase {
     }: CreateMovieUseCaseRequest): Promise<CreateMovietUseCaseResponse> {
         const isValidMovie = await this.tmdbServices.findMovieByName(movieName)
 
+
         if (!isValidMovie) {
+            
             throw new MovieNotFoundError()
         }
+
+        const logProps = isValidMovie.metaData
+
+        await this.createLog.execute({
+            protocol: logProps.protocol,
+            endpoint: logProps.endpoint,
+            method: logProps.method,
+            statusCode: 200,
+            sourceUniqueId: isValidMovie.tmdbId
+        })
 
         const isValidMovieOnBase = await this.moviesRepository.findMovieByTmdbId(isValidMovie.tmdbId)
         

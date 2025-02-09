@@ -1,6 +1,6 @@
 import { describe, expect, it, beforeEach } from "vitest";
 import { InMemoryMoviesRepository } from "../repositories/in-memory/in-memory-movies-repository";
-import { InMemoryMovieHistoryRepository } from "../repositories/in-memory/in-memory-movie-history-repository";
+import { InMemoryMovieHistoryRepository } from "../repositories/in-memory/in-memory-movie-histories-repository";
 import { CreateHistoryMovieUseCase } from "./create-history-movie";
 import { Movie } from "../entities/movie";
 import { UniqueEntityID } from "../entities/unique.entity-id";

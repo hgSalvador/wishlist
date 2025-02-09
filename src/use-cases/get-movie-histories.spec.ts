@@ -1,7 +1,7 @@
 import { expect, beforeEach, describe, it } from 'vitest';
 import { Movie } from '../entities/movie';
 import { InMemoryMoviesRepository } from '../repositories/in-memory/in-memory-movies-repository';
-import { InMemoryMovieHistoryRepository } from '../repositories/in-memory/in-memory-movie-history-repository';
+import { InMemoryMovieHistoryRepository } from '../repositories/in-memory/in-memory-movie-histories-repository';
 import { GetMovieHistoryUseCase } from './get-movie-histories';
 import { UniqueEntityID } from '../entities/unique.entity-id';
 import { MovieHistory } from '../repositories/history-movies-repository';
@@ -9,7 +9,7 @@ import { MovieHistory } from '../repositories/history-movies-repository';
 let inMemoryMoviesRepository: InMemoryMoviesRepository
 let inMemoryMovieHistoryRepository: InMemoryMovieHistoryRepository
 let movie: Movie
-let movieHistoriy: MovieHistory
+let movieHistory: MovieHistory
 let sut: GetMovieHistoryUseCase
 
 describe('Get a history movie', () => {
@@ -32,7 +32,7 @@ describe('Get a history movie', () => {
 
         await inMemoryMoviesRepository.create(movie)
 
-        const movieHistory: MovieHistory = {
+        movieHistory = {
             id: 'history-01',
             movieId: movie.id.toString(),
             newState: movie.state,

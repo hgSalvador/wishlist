@@ -15,14 +15,14 @@ interface ReviewMovieUseCaseResponse {
 }
 
 export class ReviewMovieUseCase {
-    constructor(private moviesRepository) {}
+    constructor(private moviesRepository: MoviesRepository) {}
 
     async execute({
         userId,
         movieId,
         rating,
     }: ReviewMovieUseCaseRequest): Promise<ReviewMovieUseCaseResponse> {
-        const movie: Movie = await this.moviesRepository.findMovieByMovieIdAndUserId(userId, movieId)
+        const movie: Movie | null = await this.moviesRepository.findMovieByMovieIdAndUserId(userId, movieId)
 
         if (!movie) {
             throw new ResourceNotFoundError()

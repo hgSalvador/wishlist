@@ -17,6 +17,9 @@ importers:
       '@types/axios':
         specifier: ^0.14.4
         version: 0.14.4
+      '@types/bcrypt':
+        specifier: ^5.0.2
+        version: 5.0.2
       axios:
         specifier: ^1.7.9
         version: 1.7.9
@@ -35,22 +38,25 @@ importers:
       fastify-plugin:
         specifier: ^5.0.1
         version: 5.0.1
-      prisma:
-        specifier: ^6.3.1
-        version: 6.3.1(typescript@5.7.3)
       tsup:
         specifier: ^8.3.6
         version: 8.3.6(postcss@8.5.1)(tsx@4.19.2)(typescript@5.7.3)
-      tsx:
-        specifier: ^4.19.2
-        version: 4.19.2
       zod:
         specifier: ^3.24.1
         version: 3.24.1
     devDependencies:
+      '@types/bcryptjs':
+        specifier: ^2.4.6
+        version: 2.4.6
       '@types/node':
         specifier: ^22.13.1
         version: 22.13.1
+      prisma:
+        specifier: ^6.3.1
+        version: 6.3.1(typescript@5.7.3)
+      tsx:
+        specifier: ^4.19.2
+        version: 4.19.2
       typescript:
         specifier: ^5.7.3
         version: 5.7.3
@@ -527,6 +533,12 @@ packages:
   '@types/axios@0.14.4':
     resolution: {integrity: sha512-9JgOaunvQdsQ/qW2OPmE5+hCeUB52lQSolecrFrthct55QekhmXEwT203s20RL+UHtCQc15y3VXpby9E7Kkh/g==}
     deprecated: This is a stub types definition. axios provides its own type definitions, so you do not need this installed.
+
+  '@types/bcrypt@5.0.2':
+    resolution: {integrity: sha512-6atioO8Y75fNcbmj0G7UjI9lXN2pQ/IGJ2FWT4a/btd0Lk9lQalHLKhkgKVZ3r+spnmWUKfbMi1GEe9wyHQfNQ==}
+
+  '@types/bcryptjs@2.4.6':
+    resolution: {integrity: sha512-9xlo6R2qDs5uixm0bcIqCeMCE6HiQsIyel9KQySStiyqNl2tnj2mP3DX1Nf56MD6KMenNNlBBsy3LJ7gUEQPXQ==}
 
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
@@ -1545,6 +1557,12 @@ snapshots:
       axios: 1.7.9
     transitivePeerDependencies:
       - debug
+
+  '@types/bcrypt@5.0.2':
+    dependencies:
+      '@types/node': 22.13.1
+
+  '@types/bcryptjs@2.4.6': {}
 
   '@types/estree@1.0.6': {}
 

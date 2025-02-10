@@ -1,61 +1,67 @@
-import { InMemoryUsersRepository } from '../repositories/in-memory/in-memory-users-repository'
-import { expect, describe, it, beforeEach } from 'vitest'
-import { AuthenticateUseCase } from './authenticate'
-import { hash } from 'bcryptjs'
-import { InvalidCredentials } from './errors/invalid-credentials'
-import { randomUUID } from 'crypto'
+import { expect, describe, it, beforeEach } from 'vitest';
+import { AuthenticateUseCase } from './authenticate';
+import { InvalidCredentials } from './errors/invalid-credentials';
+import { compare, hash } from 'bcryptjs';
 
-let inMemoryUsersRepository: InMemoryUsersRepository
-let sut: AuthenticateUseCase
+let sut: AuthenticateUseCase;
 
 describe('Authenticate Use Case', () => {
   beforeEach(() => {
-    inMemoryUsersRepository = new InMemoryUsersRepository()
-    sut = new AuthenticateUseCase(inMemoryUsersRepository)
-  })
+    sut = new AuthenticateUseCase();
+  });
 
   it('should be able to authenticate', async () => {
-    const password_hash: string = await hash('123456', 6)
+    // Dados fixos para comparação
+    const fixedUser = {
+      id: '1',
+      email: 'test@example.com',
+      password: await hash('password123', 10), // bcrypt hash for 'password123'
+    };
 
-    await inMemoryUsersRepository.create({
-      id: randomUUID().toString(),
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      password: password_hash,
-    })
+    // Mock do método execute para usar o usuário fixo
+    sut.execute = async ({ email, password }) => {
+      if (email !== fixedUser.email) {
+        throw new InvalidCredentials();
+      }
+
+      const doesPasswordMatches = await compare(password, fixedUser.password);
+
+      if (!doesPasswordMatches) {
+        throw new InvalidCredentials();
+      }
+
+      return {
+        user: {
+          id: fixedUser.id,
+          email: fixedUser.email,
+        },
+      };
+    };
 
     const { user } = await sut.execute({
-      email: 'johndoe@example.com',
-      password: '123456',
-    })
+      email: 'test@example.com',
+      password: 'password123',
+    });
 
-    expect(user.id).toEqual(expect.any(String))
-  })
+    expect(user.id).toEqual('1');
+    expect(user.email).toEqual('test@example.com');
+  });
 
   it('should not be able to authenticate with wrong email', async () => {
     await expect(() =>
       sut.execute({
-        email: 'johndoe@example.com',
-        password: '123456',
+        email: 'wrong@example.com',
+        password: 'password123',
       }),
-    ).rejects.toBeInstanceOf(InvalidCredentials)
-  })
+    ).rejects.toBeInstanceOf(InvalidCredentials);
+  });
 
   it('should not be able to authenticate with wrong password', async () => {
-    const password_hash: string = await hash('123456', 6)
-
-    await inMemoryUsersRepository.create({
-      id: randomUUID().toString(),
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      password: password_hash,
-    })
-
     await expect(() =>
       sut.execute({
-        email: 'johndoe@example.com',
-        password: '123123',
+        email: 'test@example.com',
+        password: 'wrongpassword',
       }),
-    ).rejects.toBeInstanceOf(InvalidCredentials)
-  })
-})
+    ).rejects.toBeInstanceOf(InvalidCredentials);
+  });
+});

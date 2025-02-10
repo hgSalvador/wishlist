@@ -35,7 +35,7 @@ export class InMemoryMoviesRepository implements MoviesRepository {
         return movie
     }
 
-    async getAllMovies(userId, { page }: PaginationParams) {
+    async getAllMovies(userId: string, { page }: PaginationParams) {
         const movies = this.items
         .filter((item) => item.userId.toString() === userId)
         .sort((a, b) => a.title.localeCompare(b.title))

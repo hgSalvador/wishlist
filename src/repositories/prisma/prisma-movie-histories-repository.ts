@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client/extension';
+import { PrismaClient } from '@prisma/client';
 import { MovieHistoryRepository, MovieHistory } from '../history-movies-repository';
 import { PaginationParams } from '../pagination-params';
 

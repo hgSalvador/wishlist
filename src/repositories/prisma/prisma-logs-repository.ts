@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client/extension';
+import { PrismaClient } from '@prisma/client';
 import { LogsRepository, Log } from '../logs-repository';
 import { PaginationParams } from '../pagination-params';
 
@@ -18,7 +18,7 @@ export class PrismaLogsRepository implements LogsRepository {
       id: log.id,
       protocol: log.protocol,
       endpoint: log.endpoint,
-      method: log.method,
+      method: log.method ?? undefined,
       statusCode: log.statusCode,
       sourceUniqueId: log.sourceUniqueId,
       timeStamps: log.timeStamps,
@@ -42,7 +42,7 @@ export class PrismaLogsRepository implements LogsRepository {
       id: createdLog.id,
       protocol: createdLog.protocol,
       endpoint: createdLog.endpoint,
-      method: createdLog.method,
+      method: createdLog.method ?? undefined,
       statusCode: createdLog.statusCode,
       sourceUniqueId: createdLog.sourceUniqueId,
       timeStamps: createdLog.timeStamps,

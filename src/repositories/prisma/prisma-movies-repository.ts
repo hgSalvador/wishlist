@@ -1,31 +1,47 @@
-import { PrismaClient } from '@prisma/client/extension';
+import { PrismaClient } from '@prisma/client';
 import { MoviesRepository } from '../movies-repository';
 import { Movie } from '../../entities/movie';
+import { UniqueEntityID } from '../../entities/unique.entity-id';
 
 const prisma = new PrismaClient();
 
 export class PrismaMoviesRepository implements MoviesRepository {
   async findMovieByMovieIdAndUserId(userId: string, movieId: string): Promise<Movie | null> {
     const movie = await prisma.movie.findFirst({
-        where: {
-          id: movieId,
-          userId: userId,
-        },
-      });
-  
-      if (!movie) {
-        return null;
-      }
-      return movie
+      where: {
+        id: movieId,
+        userId: userId,
+      },
+    });
+
+    if (!movie) {
+      return null;
     }
 
+    return Movie.create(
+      {
+        userId: new UniqueEntityID(movie.userId),
+        tmdbId: new UniqueEntityID(movie.tmdbId),
+        title: movie.title,
+        synopsis: movie.synopsis,
+        releaseDate: movie.releaseDate,
+        genre: movie.genre,
+        state: movie.state,
+        rating: movie.rating,
+        recommended: movie.recommended,
+        createdAt: movie.createdAt,
+        updatedAt: movie.updatedAt,
+      },
+      new UniqueEntityID(movie.id)
+    );
+  }
 
   async create(movie: Movie): Promise<void> {
     await prisma.movie.create({
       data: {
-        id: movie.id,
-        userId: movie.userId,
-        tmdbId: movie.tmdbId,
+        id: movie.id.toString(),
+        userId: movie.userId.toString(),
+        tmdbId: movie.tmdbId.toString(),
         title: movie.title,
         synopsis: movie.synopsis,
         releaseDate: movie.releaseDate,
@@ -38,7 +54,7 @@ export class PrismaMoviesRepository implements MoviesRepository {
   }
 
   async findMovieById(id: string): Promise<Movie | null> {
-    const movie: Movie = await prisma.movie.findUnique({
+    const movie = await prisma.movie.findUnique({
       where: { id },
     });
 
@@ -46,27 +62,37 @@ export class PrismaMoviesRepository implements MoviesRepository {
       return null;
     }
 
-    return movie
-    
+    return  Movie.create({
+      userId: new UniqueEntityID(movie.userId),
+      tmdbId: new UniqueEntityID(movie.tmdbId),
+      title: movie.title,
+      synopsis: movie.synopsis,
+      releaseDate: movie.releaseDate,
+      genre: movie.genre,
+      state: movie.state,
+      rating: movie.rating,
+      recommended: movie.recommended,
+      createdAt: movie.createdAt,
+      updatedAt: movie.updatedAt,
+    });
   }
 
   async findMovieByTmdbId(tmdbId: string): Promise<boolean> {
-    const movie: Movie = await prisma.movie.findUnique({
+    const movie = await prisma.movie.findFirst({
       where: { tmdbId },
     });
 
-    return !!movie
+    return !!movie;
   }
-
 
   async save(movie: Movie): Promise<void> {
     await prisma.movie.update({
       where: {
-        id: movie.id,
+        id: movie.id.toString(),
       },
       data: {
-        userId: movie.userId,
-        tmdbId: movie.tmdbId,
+        userId: movie.userId.toString(),
+        tmdbId: movie.tmdbId.toString(),
         title: movie.title,
         synopsis: movie.synopsis,
         releaseDate: movie.releaseDate,
@@ -88,17 +114,20 @@ export class PrismaMoviesRepository implements MoviesRepository {
       },
     });
 
-    return movies.map(movie => ({
-      id: movie.id,
-      userId: movie.userId,
-      tmdbId: movie.tmdbId,
-      title: movie.title,
-      synopsis: movie.synopsis,
-      releaseDate: movie.releaseDate,
-      genre: movie.genre,
-      state: movie.state,
-      rating: movie.rating,
-      recommended: movie.recommended,
-    }));
+    return movies.map(movie => 
+      Movie.create({
+        userId: new UniqueEntityID(movie.userId),
+        tmdbId: new UniqueEntityID(movie.tmdbId),
+        title: movie.title,
+        synopsis: movie.synopsis,
+        releaseDate: movie.releaseDate,
+        genre: movie.genre,
+        state: movie.state,
+        rating: movie.rating,
+        recommended: movie.recommended,
+        createdAt: movie.createdAt,
+        updatedAt: movie.updatedAt,
+      }, new UniqueEntityID(movie.id))
+    );
   }
 }

@@ -1,13 +1,12 @@
 import axios from 'axios';
 import { env } from '../../env';
-import { timeStamp } from 'console';
 
-export class TmdbMoviesServices implements TmdbMoviesServices {
-  private apiKey: string;
+export class TmdbMoviesServices {
+  private token: string;
   private baseUrl: string;
 
   constructor() {
-    this.apiKey = env.API_KEY_TMDB;
+    this.token = env.BEARER_TOKEN_TMDB_AUTH;
     this.baseUrl = env.BASE_URL_TMDB;
   }
 
@@ -15,8 +14,10 @@ export class TmdbMoviesServices implements TmdbMoviesServices {
     try {
       const response = await axios.get(`${this.baseUrl}/search/movie`, {
         params: {
-          api_key: this.apiKey,
           query: movieName,
+        },
+        headers: {
+          Authorization: `Bearer ${this.token}`,
         },
       });
 
@@ -31,14 +32,14 @@ export class TmdbMoviesServices implements TmdbMoviesServices {
         title: movie.title,
         synopsis: movie.overview,
         releaseDate: movie.release_date,
-        genre: movie.genre_ids[0], // Assuming the first genre ID is sufficient
-        recommended: movie.vote_average > 7, // Example logic for recommendation
+        genre: movie.genre_ids[0], 
+        recommended: movie.vote_average > 7, 
         metaData: {
           protocol: 'HTTP',
           endpoint: `${this.baseUrl}/search/movie`,
           method: 'GET',
           statusCode: response.status,
-          timeStamp: new Date()
+          timeStamp: new Date(),
         },
       };
     } catch (error) {

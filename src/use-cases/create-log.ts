@@ -6,7 +6,7 @@ interface CreateLogUseCaseRequest {
     endpoint: string
     method?: string
     statusCode: number
-    sourceUniqueId: string
+    sourceUniqueId?: string
 }
 
 interface CreateLogUseCaseResponse {
@@ -31,7 +31,7 @@ export class CreateLogUseCase {
             endpoint,
             method: method ?? undefined,
             statusCode,
-            sourceUniqueId,
+            sourceUniqueId: sourceUniqueId ?? "",
             timeStamps: new Date()
         })
         

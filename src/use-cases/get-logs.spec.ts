@@ -3,7 +3,6 @@ import { InMemoryLogsRepository } from "../repositories/in-memory/in-memory-logs
 import { GetAllLogsUseCase } from "../use-cases/get-logs"
 import { ResourceNotFoundError } from "./errors/resource-not-found";
 import { Log } from "../repositories/logs-repository";
-import exp from "constants";
 
 let logs: Log[]
 let inMemoryLogsRepository: InMemoryLogsRepository

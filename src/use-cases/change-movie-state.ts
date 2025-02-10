@@ -1,5 +1,6 @@
 import { Movie } from "../entities/movie";
 import { MoviesRepository } from "../repositories/movies-repository";
+import { CreateLogUseCase } from "./create-log";
 import { ResourceNotFoundError } from "./errors/resource-not-found";
 
 interface ChangeMovieStateUseCaseRequest {
@@ -14,14 +15,26 @@ interface ChangeMovieStateUseCaseResponse {
     currentState: string
 }
 
-export class ChangeMovieStateUseCase {
-    constructor(private moviesRepository: MoviesRepository) {}
+interface MetaData {
+    protocol: string;
+    endpoint: string;
+    method: string;
+    statusCode: number;
+}
 
-    async execute({
-        userId,
-        movieId, 
-        state
-    }: ChangeMovieStateUseCaseRequest): Promise<ChangeMovieStateUseCaseResponse> {
+
+export class ChangeMovieStateUseCase {
+    constructor(
+        private createLog: CreateLogUseCase,
+        private moviesRepository: MoviesRepository
+    
+    ) {}
+
+    async execute(
+        { userId, movieId, state }: ChangeMovieStateUseCaseRequest,
+        { protocol, endpoint, method, statusCode }: MetaData
+    
+    ): Promise<ChangeMovieStateUseCaseResponse> {
         const movie = await this.moviesRepository.findMovieByMovieIdAndUserId(userId, movieId)
 
         if (!movie) {
@@ -33,6 +46,15 @@ export class ChangeMovieStateUseCase {
         movie.state = state
 
         await this.moviesRepository.save(movie)
+
+        await this.createLog.execute({
+            protocol,
+            endpoint,
+            method,
+            statusCode,
+            sourceUniqueId: movie.id.toString()
+        })
+
 
         return {
             movieId: movie.id.toString(),

@@ -1,19 +1,25 @@
 import { describe, expect, it, beforeEach } from "vitest";
 import { Movie } from "../entities/movie";
 import { UniqueEntityID } from "../entities/unique.entity-id";
+import { InMemoryLogsRepository } from "../repositories/in-memory/in-memory-logs-repository";
 import { InMemoryMoviesRepository } from "../repositories/in-memory/in-memory-movies-repository";
+import { CreateLogUseCase } from "./create-log";
 import { ChangeMovieStateUseCase } from "./change-movie-state";
 
 let movie: Movie
 
+let inMemoryLogsRepository: InMemoryLogsRepository
 let inMemoryMoviesRepository: InMemoryMoviesRepository
+let createLog: CreateLogUseCase
 let sut: ChangeMovieStateUseCase
 
 
 describe('Change movie state', () => {
     beforeEach(async () => {
+        inMemoryLogsRepository = new InMemoryLogsRepository()
+        createLog = new CreateLogUseCase(inMemoryLogsRepository)
         inMemoryMoviesRepository = new InMemoryMoviesRepository()
-        sut = new ChangeMovieStateUseCase(inMemoryMoviesRepository)
+        sut = new ChangeMovieStateUseCase(createLog, inMemoryMoviesRepository)
 
 
         movie = Movie.create({
@@ -37,7 +43,14 @@ describe('Change movie state', () => {
             userId: 'user-01',
             movieId: movie.id.toString(),
             state: 'Watched'
-        })
+        },
+        {
+            protocol: 'HTTP',
+            endpoint: '/movies',
+            method: 'PUT',
+            statusCode: 203
+        }
+    )
 
         expect(result.currentState).toEqual('Watched')
     })

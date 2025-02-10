@@ -5,15 +5,25 @@ import { MoviesRepository } from "../repositories/movies-repository";
 import { TmdbMoviesServices } from "../services/tmdb-services";
 import { MovieNotFoundError } from "./errors/movie-not-found";
 import { ResourceNotFoundError } from "./errors/resource-not-found";
+import { Log } from "../repositories/logs-repository";
 
 
 interface CreateMovieUseCaseRequest {
     userId: string
     movieName: string
+    
 }
 
 interface CreateMovietUseCaseResponse {
+    metaData: Log 
     movie: Movie
+}
+
+interface MetaData {
+    protocol: string;
+    endpoint: string;
+    method: string;
+    statusCode: number;
 }
 
 export class CreateMovieUseCase {
@@ -23,15 +33,22 @@ export class CreateMovieUseCase {
         private tmdbServices: TmdbMoviesServices
     ) {}
 
-    async execute({
-        userId,
-        movieName
-    }: CreateMovieUseCaseRequest): Promise<CreateMovietUseCaseResponse> {
+    async execute(
+    { userId, movieName }: CreateMovieUseCaseRequest,
+    { protocol, endpoint, method, statusCode }: MetaData
+): Promise<CreateMovietUseCaseResponse> {
         const isValidMovie = await this.tmdbServices.findMovieByName(movieName)
 
 
         if (!isValidMovie) {
-            
+            await this.createLog.execute({
+            protocol,
+            endpoint,
+            method,
+            statusCode,
+            sourceUniqueId: ''
+        })
+
             throw new MovieNotFoundError()
         }
 
@@ -66,7 +83,24 @@ export class CreateMovieUseCase {
 
         await this.moviesRepository.create(movie)
 
+        const { log } = await this.createLog.execute({
+            protocol,
+            endpoint,
+            method,
+            statusCode,
+            sourceUniqueId: movie.id.toString()
+        })
+
         return  {
+            metaData: {
+                id: log.id,
+                protocol: log.protocol,
+                endpoint: log.endpoint,
+                method: log.method,
+                statusCode: log.statusCode,
+                sourceUniqueId: log.sourceUniqueId,
+                timeStamps: log.timeStamps
+            },
             movie
         }
     }

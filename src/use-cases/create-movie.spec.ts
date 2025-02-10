@@ -18,13 +18,23 @@ describe('Create a movie', () => {
         inMemoryMoviesRepository = new InMemoryMoviesRepository(),
         tmdbServices = new InMemoryTmdbMoviesServices()
         sut = new CreateMovieUseCase(createLog, inMemoryMoviesRepository, tmdbServices)
+
     })
 
     it('should be able to register', async () => {
-        await sut.execute({ 
-            userId: 'user-01',
-            movieName: 'Interstellar'
-        })
+        await sut.execute(
+            { 
+                userId: 'user-01',
+                movieName: 'Interstellar',
+            },
+            {
+                protocol: 'HTTP',
+                endpoint: '/movies',
+                method: 'POST',
+                statusCode: 200
+            }
+
+        )
     
         expect(inMemoryMoviesRepository.items[0].title).toBe('Interstellar')
         expect(inMemoryMoviesRepository.items[0].state).toBe('To watch')

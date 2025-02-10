@@ -1,6 +1,7 @@
 import { UniqueEntityID } from "../entities/unique.entity-id";
 import { Movie } from "../entities/movie";
 import { CreateLogUseCase } from "./create-log";
+import { CreateHistoryMovieUseCase } from "./create-history-movie";
 import { MoviesRepository } from "../repositories/movies-repository";
 import { TmdbMoviesServices } from "../services/tmdb-services";
 import { MovieNotFoundError } from "./errors/movie-not-found";
@@ -29,6 +30,7 @@ interface MetaData {
 export class CreateMovieUseCase {
     constructor(
         private createLog: CreateLogUseCase,
+        private createMovieHistory: CreateHistoryMovieUseCase,
         private moviesRepository: MoviesRepository,
         private tmdbServices: TmdbMoviesServices
     ) {}
@@ -89,6 +91,11 @@ export class CreateMovieUseCase {
             method,
             statusCode,
             sourceUniqueId: movie.id.toString()
+        })
+
+        await this.createMovieHistory.execute({
+            movieId: movie.id.toString(),
+            newState: movie.state
         })
 
         return  {

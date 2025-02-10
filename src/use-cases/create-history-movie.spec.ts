@@ -1,9 +1,10 @@
 import { describe, expect, it, beforeEach } from "vitest";
+import { Movie } from "../entities/movie";
+import { UniqueEntityID } from "../entities/unique.entity-id";
 import { InMemoryMoviesRepository } from "../repositories/in-memory/in-memory-movies-repository";
 import { InMemoryMovieHistoryRepository } from "../repositories/in-memory/in-memory-movie-histories-repository";
 import { CreateHistoryMovieUseCase } from "./create-history-movie";
-import { Movie } from "../entities/movie";
-import { UniqueEntityID } from "../entities/unique.entity-id";
+
 
 
 let movie: Movie
@@ -13,9 +14,9 @@ let sut: CreateHistoryMovieUseCase
 
 describe('Create a movie history', () => {
     beforeEach(async () => {
-        inMemoryMoviesRepository = new InMemoryMoviesRepository(),
-        inMemoryMovieHistoryRepository = new InMemoryMovieHistoryRepository(),
-        sut = new CreateHistoryMovieUseCase(inMemoryMoviesRepository, inMemoryMovieHistoryRepository)
+        inMemoryMoviesRepository = new InMemoryMoviesRepository();
+        inMemoryMovieHistoryRepository = new InMemoryMovieHistoryRepository();
+        sut = new CreateHistoryMovieUseCase(inMemoryMoviesRepository, inMemoryMovieHistoryRepository);
 
         movie = Movie.create({
             userId: new UniqueEntityID('user-01'),
@@ -29,6 +30,7 @@ describe('Create a movie history', () => {
             recommended: true,
         })
 
+    
         await inMemoryMoviesRepository.create(movie)
     })
 

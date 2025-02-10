@@ -1,6 +1,8 @@
 import { Movie } from "../entities/movie";
 import { MoviesRepository } from "../repositories/movies-repository";
+import { CreateHistoryMovieUseCase } from "./create-history-movie";
 import { CreateLogUseCase } from "./create-log";
+import { InvalidStateTransitionError } from "./errors/invalid-movie-state";
 import { ResourceNotFoundError } from "./errors/resource-not-found";
 
 interface ChangeMovieStateUseCaseRequest {
@@ -22,10 +24,10 @@ interface MetaData {
     statusCode: number;
 }
 
-
 export class ChangeMovieStateUseCase {
     constructor(
         private createLog: CreateLogUseCase,
+        private movieHistory: CreateHistoryMovieUseCase,
         private moviesRepository: MoviesRepository
     
     ) {}
@@ -38,10 +40,25 @@ export class ChangeMovieStateUseCase {
         const movie = await this.moviesRepository.findMovieByMovieIdAndUserId(userId, movieId)
 
         if (!movie) {
+            await this.createLog.execute({
+                protocol,
+                endpoint,
+                method,
+                statusCode
+            })
+
             throw new ResourceNotFoundError()
         }
 
         const oldState = movie.state
+
+        if (state === 'Reviewed' && oldState !== 'Watched') {
+            throw new InvalidStateTransitionError()
+        }
+
+        if ((state === 'Recommended' || state === 'Not Recommended') && oldState !== 'Reviewed') {
+            throw new InvalidStateTransitionError()
+        }
 
         movie.state = state
 
@@ -55,6 +72,10 @@ export class ChangeMovieStateUseCase {
             sourceUniqueId: movie.id.toString()
         })
 
+        await this.movieHistory.execute({
+            movieId: movie.id.toString(),
+            newState: movie.state
+        })
 
         return {
             movieId: movie.id.toString(),

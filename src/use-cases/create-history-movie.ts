@@ -3,30 +3,29 @@ import { MovieHistory, MovieHistoryRepository } from "../repositories/history-mo
 import { MoviesRepository } from "../repositories/movies-repository";
 import { ResourceNotFoundError } from "./errors/resource-not-found";
 
-
 interface CreateHistoryMovieUseCaseRequest {
-    movieId: string
-    newState: string
+    movieId: string;
+    newState: string;
 }
 
 export interface CreateHistoryMovieUseCaseResponse {
-    movieHistory: MovieHistory
+    movieHistory: MovieHistory;
 }
 
 export class CreateHistoryMovieUseCase {
     constructor(
         private moviesRepository: MoviesRepository,
         private moviesHistoryRepository: MovieHistoryRepository
-    ) {} 
+    ) {}
 
     async execute({
         movieId,
         newState,
     }: CreateHistoryMovieUseCaseRequest): Promise<CreateHistoryMovieUseCaseResponse> {
-        const movie = await this.moviesRepository.findMovieById(movieId)
+        const movie = await this.moviesRepository.findMovieById(movieId.toString())
 
         if (!movie) {
-            throw new ResourceNotFoundError()
+            throw new ResourceNotFoundError();
         }
 
         const movieHistory: MovieHistory = {
@@ -34,12 +33,12 @@ export class CreateHistoryMovieUseCase {
             movieId: movie.id.toString(),
             newState: newState,
             createdAt: new Date()
-        }
+        };
 
-        await this.moviesHistoryRepository.create(movieHistory)
+        await this.moviesHistoryRepository.create(movieHistory);
 
         return {
             movieHistory
-        }
+        };
     }
 }

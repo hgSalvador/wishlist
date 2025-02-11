@@ -81,7 +81,7 @@ export class Movie extends Entity<MovieProps> {
         this.touch()
     }
 
-    set genre(genre: string) {
+    set genre(genre: number[]) {
         this.props.genre = genre
         this.touch()
     }

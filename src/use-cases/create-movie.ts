@@ -5,8 +5,8 @@ import { CreateHistoryMovieUseCase } from "./create-history-movie";
 import { MoviesRepository } from "../repositories/movies-repository";
 import { TmdbMoviesServices } from "../services/tmdb-services";
 import { MovieNotFoundError } from "./errors/movie-not-found";
-import { ResourceNotFoundError } from "./errors/resource-not-found";
-import { Log } from "../repositories/logs-repository";
+import { Log } from "@prisma/client"; 
+
 
 
 interface CreateMovieUseCaseRequest {
@@ -41,16 +41,14 @@ export class CreateMovieUseCase {
 ): Promise<CreateMovietUseCaseResponse> {
         const isValidMovie = await this.tmdbServices.findMovieByName(movieName)
 
-
         if (!isValidMovie) {
-            await this.createLog.execute({
+            const test = await this.createLog.execute({
             protocol,
             endpoint,
             method,
             statusCode,
             sourceUniqueId: ''
         })
-
             throw new MovieNotFoundError()
         }
 
@@ -64,27 +62,22 @@ export class CreateMovieUseCase {
             sourceUniqueId: isValidMovie.tmdbId
         })
 
-        const isValidMovieOnBase = await this.moviesRepository.findMovieByTmdbId(isValidMovie.tmdbId)
-        
-
-        if (isValidMovieOnBase) {
-            throw new ResourceNotFoundError()
-        }
-
         const movie = Movie.create({
             userId: new UniqueEntityID(userId),
-            tmdbId: new UniqueEntityID(isValidMovie.tmdbId),
+            tmdbId: new UniqueEntityID(isValidMovie.tmdbId.toString()),
             title: isValidMovie.title,
             synopsis: isValidMovie.synopsis,
             releaseDate: isValidMovie.releaseDate,
-            genre: isValidMovie.genre,
+            genre: isValidMovie.genre.toString(),
             state: 'To watch',
             rating: 1,
-            recommended: isValidMovie.recommended,     
+            recommended: true     
         })
 
+        
         await this.moviesRepository.create(movie)
 
+        
         const { log } = await this.createLog.execute({
             protocol,
             endpoint,
@@ -92,11 +85,12 @@ export class CreateMovieUseCase {
             statusCode,
             sourceUniqueId: movie.id.toString()
         })
-
+        
         await this.createMovieHistory.execute({
             movieId: movie.id.toString(),
             newState: movie.state
         })
+
 
         return  {
             metaData: {

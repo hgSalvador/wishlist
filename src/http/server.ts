@@ -20,12 +20,11 @@ const checkPort = (port: number) => {
 
 const start = async () => {
   try {
-    await checkPort(env.PORT);
     await server.listen({ port: env.PORT, host: '0.0.0.0' });
     console.log(`Server is running at http://localhost:${env.PORT}`);
   } catch (err) {
     server.log.error(err);
-    process.exit(1); // Adicione isso para garantir que o processo saia em caso de erro
+    process.exit(1); 
   }
 };
 

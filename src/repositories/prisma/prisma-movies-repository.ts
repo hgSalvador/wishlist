@@ -25,7 +25,7 @@ export class PrismaMoviesRepository implements MoviesRepository {
         title: movie.title,
         synopsis: movie.synopsis,
         releaseDate: movie.releaseDate,
-        genre: movie.genre,
+        genre: movie.genre.join(', '),
         state: movie.state,
         rating: movie.rating,
         recommended: movie.recommended,
@@ -45,7 +45,7 @@ export class PrismaMoviesRepository implements MoviesRepository {
         title: movie.title,
         synopsis: movie.synopsis,
         releaseDate: movie.releaseDate,
-        genre: movie.genre,
+        genre: movie.genre.toString(),
         state: movie.state,
         rating: movie.rating,
         recommended: movie.recommended,
@@ -74,7 +74,8 @@ export class PrismaMoviesRepository implements MoviesRepository {
       recommended: movie.recommended,
       createdAt: movie.createdAt,
       updatedAt: movie.updatedAt,
-    });
+    },
+    new UniqueEntityID(movie.id));
   }
 
   async findMovieByTmdbId(tmdbId: string): Promise<boolean> {

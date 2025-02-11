@@ -22,21 +22,25 @@ export class CreateHistoryMovieUseCase {
         movieId,
         newState,
     }: CreateHistoryMovieUseCaseRequest): Promise<CreateHistoryMovieUseCaseResponse> {
-        const movie = await this.moviesRepository.findMovieById(movieId.toString())
 
+        const movie = await this.moviesRepository.findMovieById(movieId.toString())
+        
         if (!movie) {
             throw new ResourceNotFoundError();
         }
-
+        
         const movieHistory: MovieHistory = {
             id: randomUUID().toString(),
             movieId: movie.id.toString(),
             newState: newState,
             createdAt: new Date()
         };
+        
 
-        await this.moviesHistoryRepository.create(movieHistory);
+        await this.moviesHistoryRepository.create(movieHistory)
 
+
+        
         return {
             movieHistory
         };

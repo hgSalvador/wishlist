@@ -9,7 +9,7 @@ import { basicAuthMiddleware } from '../../middlewares/basic-auth-middleware';
 
 export async function moviesRoutes(server: FastifyInstance) {
   server.post('/filme', { preHandler: basicAuthMiddleware }, createMovieController);
-  server.get('/filme', { preHandler: basicAuthMiddleware }, fetchMoviesController);
+  server.get('/filmes', { preHandler: basicAuthMiddleware }, fetchMoviesController);
   server.get('/filme/:id', { preHandler: basicAuthMiddleware }, getMovieController);
   server.put('/filme/:id/estado', { preHandler: basicAuthMiddleware }, changeMovieStateController);
   server.post('/filme/:id/avaliar', { preHandler: basicAuthMiddleware }, reviewMovieController);

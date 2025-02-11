@@ -4,6 +4,7 @@ import { env } from '../../env';
 export class TmdbMoviesServices {
   private token: string;
   private baseUrl: string;
+  
 
   constructor() {
     this.token = env.BEARER_TOKEN_TMDB_AUTH;
@@ -33,7 +34,6 @@ export class TmdbMoviesServices {
         synopsis: movie.overview,
         releaseDate: movie.release_date,
         genre: movie.genre_ids[0], 
-        recommended: movie.vote_average > 7, 
         metaData: {
           protocol: 'HTTP',
           endpoint: `${this.baseUrl}/search/movie`,

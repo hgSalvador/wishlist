@@ -34,6 +34,8 @@ export class CreateLogUseCase {
             sourceUniqueId: sourceUniqueId ?? "",
             timeStamps: new Date()
         })
+
+        
         
         return {
             log: log

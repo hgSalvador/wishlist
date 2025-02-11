@@ -25,28 +25,26 @@ export class PrismaLogsRepository implements LogsRepository {
     }));
   }
 
-  async create(log: Log): Promise<Log> {
-    const createdLog = await prisma.log.create({
-      data: {
-        id: log.id,
-        protocol: log.protocol,
-        endpoint: log.endpoint,
-        method: log.method,
-        statusCode: log.statusCode,
-        sourceUniqueId: log.sourceUniqueId,
-        timeStamps: log.timeStamps,
-      },
-    });
+  async create(data: Log): Promise<Log> {
+      const createdLog = await prisma.log.create({
+        data: {
+          protocol: data.protocol,
+          endpoint: data.endpoint,
+          method: data.method ?? undefined,
+          statusCode: data.statusCode,
+          sourceUniqueId: data.sourceUniqueId.toString(),
+        },
+      });
 
-    return {
-      id: createdLog.id,
-      protocol: createdLog.protocol,
-      endpoint: createdLog.endpoint,
-      method: createdLog.method ?? undefined,
-      statusCode: createdLog.statusCode,
-      sourceUniqueId: createdLog.sourceUniqueId,
-      timeStamps: createdLog.timeStamps,
-    };
+      return {
+        id: createdLog.id.toString(),
+        protocol: createdLog.protocol,
+        endpoint: createdLog.endpoint,
+        method: createdLog.method ?? undefined,
+        statusCode: createdLog.statusCode,
+        sourceUniqueId: createdLog.sourceUniqueId.toString(),
+        timeStamps: createdLog.timeStamps,
+      };
   }
 
   async save(log: Log): Promise<void> {

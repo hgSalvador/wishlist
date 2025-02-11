@@ -1,26 +1,30 @@
-import { FastifyRequest, FastifyReply } from 'fastify';
+import fastify, { FastifyRequest, FastifyReply } from 'fastify';
 import { z } from 'zod';
 import { makeCreateMovieUseCase } from '../../../use-cases/factories/make-create-movie-use-case';
 
 const createMovieSchema = z.object({
   userId: z.string(),
   movieName: z.string(),
-  protocol: z.string(),
-  endpoint: z.string(),
-  method: z.string(),
-  statusCode: z.number(),
 });
 
 export async function createMovieController(request: FastifyRequest, reply: FastifyReply) {
   try {
-    const { userId, movieName, protocol, endpoint, method, statusCode } = createMovieSchema.parse(request.body);
+    const { userId, movieName } = createMovieSchema.parse(request.body);
+
+    const protocol = 'HTTP'
+    const method = request.method
+    const endpoint = request.originalUrl
+    const statusCode = reply.statusCode
+
 
     const createMovieUseCase = makeCreateMovieUseCase();
 
     const result = await createMovieUseCase.execute(
       { userId, movieName },
-      { protocol, endpoint, method, statusCode }
+      { protocol, method, endpoint, statusCode }
     );
+
+
 
     return reply.status(200).send(result);
   } catch (error) {

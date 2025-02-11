@@ -10,8 +10,7 @@ export interface TmdbMoviesServicesSuccesResponse {
     title: string
     synopsis: string
     releaseDate: string
-    genre: string
-    recommended: boolean
+    genre: number
 }
 
 

@@ -1,6 +1,6 @@
 import { PaginationParams } from "./pagination-params";
 
-export interface Log {
+export interfaceLog {
     id: string
     protocol: string
     endpoint: string

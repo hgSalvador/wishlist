@@ -4,7 +4,7 @@ import { InvalidCredentials } from '../../../use-cases/errors/invalid-credential
 import { compare } from 'bcryptjs';
 
 const authenticateSchema = z.object({
-  email: z.string().email(),
+  email: z.string(),
   password: z.string().min(6),
 });
 

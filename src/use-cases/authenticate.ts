@@ -1,5 +1,5 @@
 import { InvalidCredentials } from './errors/invalid-credentials';
-import { compare } from 'bcryptjs';
+import { compare, hash } from 'bcryptjs';
 
 interface AuthenticateUseCaseRequest {
   email: string;
@@ -21,10 +21,12 @@ export class AuthenticateUseCase {
     password,
   }: AuthenticateUseCaseRequest): Promise<AuthenticateUseCaseResponse> {
     // Dados fixos para comparação
+
+    const hashedPassword = await hash('password123', 10)
     const fixedUser = {
       id: '1',
       email: 'test@example.com',
-      password: '$2a$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36Fjs1K1E6QJ2l5z5J1U1eW', // bcrypt hash for 'password123'
+      password: hashedPassword, // bcrypt hash for 'password123'
     };
 
     if (email !== fixedUser.email) {
